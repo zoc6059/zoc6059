@@ -1,0 +1,70 @@
+def L():
+    SuperBit.motor_run_dual(SuperBit.enMotors.M1, 0, SuperBit.enMotors.M3, forward)
+    basic.pause(500)
+    SuperBit.motor_stop_all()
+
+def on_received_number(receivedNumber):
+    if receivedNumber == 1:
+        basic.show_arrow(ArrowNames.NORTH)
+        F()
+    elif receivedNumber == 3:
+        basic.show_arrow(ArrowNames.WEST)
+        L()
+    elif receivedNumber == 4:
+        basic.show_arrow(ArrowNames.EAST)
+        R()
+    elif receivedNumber == 2:
+        basic.show_arrow(ArrowNames.SOUTH)
+        B()
+radio.on_received_number(on_received_number)
+
+def F():
+    SuperBit.motor_run_dual(SuperBit.enMotors.M1, forward, SuperBit.enMotors.M3, forward)
+    basic.pause(500)
+    SuperBit.motor_stop_all()
+
+def on_button_pressed_a():
+    radio.send_number(3)
+input.on_button_pressed(Button.A, on_button_pressed_a)
+
+def B():
+    SuperBit.motor_run_dual(SuperBit.enMotors.M1,
+        backword,
+        SuperBit.enMotors.M3,
+        backword)
+    basic.pause(500)
+    SuperBit.motor_stop_all()
+
+def on_button_pressed_ab():
+    radio.send_number(1)
+input.on_button_pressed(Button.AB, on_button_pressed_ab)
+
+def on_button_pressed_b():
+    radio.send_number(4)
+input.on_button_pressed(Button.B, on_button_pressed_b)
+
+def R():
+    SuperBit.motor_run_dual(SuperBit.enMotors.M1, forward, SuperBit.enMotors.M3, 0)
+    basic.pause(500)
+    SuperBit.motor_stop_all()
+
+def on_logo_touched():
+    radio.send_number(2)
+input.on_logo_event(TouchButtonEvent.TOUCHED, on_logo_touched)
+
+backword = 0
+forward = 0
+basic.show_icon(IconNames.HEART)
+music.set_volume(50)
+radio.set_group(15)
+for index in range(4):
+    music._play_default_background(music.built_in_playable_melody(Melodies.POWER_UP),
+        music.PlaybackMode.IN_BACKGROUND)
+    music._play_default_background(music.built_in_playable_melody(Melodies.POWER_DOWN),
+        music.PlaybackMode.IN_BACKGROUND)
+forward = 150
+backword = -150
+
+def on_forever():
+    radio.set_group(15)
+basic.forever(on_forever)
