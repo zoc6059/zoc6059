@@ -1,0 +1,104 @@
+def on_button_pressed_a():
+    led.unplot(1, 3)
+    if a[0] == 1:
+        a[0] = 2
+input.on_button_pressed(Button.A, on_button_pressed_a)
+
+def on_button_pressed_ab():
+    global a_length, b_length, end, run, score, time
+    if run == 0:
+        basic.clear_screen()
+        led.stop_animation()
+        a_length = len(a)
+        b_length = len(b)
+        for index in range(5):
+            a.unshift(0)
+        for index2 in range(5):
+            b.unshift(0)
+        end = 3
+        run = 1
+        score = 0
+        time = 500
+        led.plot_brightness(0, 3, 30)
+        led.plot_brightness(2, 3, 30)
+        led.plot_brightness(4, 3, 30)
+    else:
+        led.unplot(1, 3)
+        if a[0] == 1:
+            a[0] = 2
+        led.unplot(3, 3)
+        if b[0] == 1:
+            b[0] = 2
+input.on_button_pressed(Button.AB, on_button_pressed_ab)
+
+def on_button_pressed_b():
+    led.unplot(3, 3)
+    if b[0] == 1:
+        b[0] = 2
+input.on_button_pressed(Button.B, on_button_pressed_b)
+
+time = 0
+score = 0
+b_length = 0
+a_length = 0
+run = 0
+end = 0
+b: List[number] = []
+a: List[number] = []
+a = [1, 0, 1, 0, 1, 0, 1, 0]
+b = [1, 0, 0, 0, 1, 0, 0, 0]
+end = 3
+run = 0
+
+def on_forever():
+    global end, score
+    if run == 1:
+        index3 = 0
+        while index3 <= a_length:
+            if a[index3] == 1:
+                led.plot(1, 4 - index3)
+                if index3 == 0:
+                    end += -1
+            elif a[index3] == 2:
+                if index3 == 0:
+                    a[0] = 1
+                    led.unplot(1, 4 - index3)
+                    score += 1
+            else:
+                led.unplot(1, 4 - index3)
+            index3 += 1
+        if len(a) > a_length:
+            a.shift()
+        else:
+            a.append(a.shift())
+        basic.pause(time)
+basic.forever(on_forever)
+
+def on_forever2():
+    global end, score
+    if run == 1:
+        for index4 in range(5):
+            if b[index4] == 1:
+                led.plot(3, 4 - index4)
+                if index4 == 0:
+                    end += -1
+            elif b[index4] == 2:
+                if index4 == 0:
+                    b[0] = 1
+                    led.unplot(3, 4 - index4)
+                    score += 1
+            else:
+                led.unplot(3, 4 - index4)
+        if len(b) > b_length:
+            b.shift()
+        else:
+            b.append(b.shift())
+        basic.pause(time)
+basic.forever(on_forever2)
+
+def on_forever3():
+    global run
+    if end == 0:
+        run = 0
+        basic.show_number(score)
+basic.forever(on_forever3)
